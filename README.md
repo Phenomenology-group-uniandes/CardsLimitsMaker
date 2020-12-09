@@ -36,24 +36,80 @@ To run the program, type the following command in your terminal replacing `<your
 ### Configuration file
 
 In order to run the program, you need to congfigure the configuration file in `JSON` format. 
+The input file to generate the card need to have the format:
+```
+folder with the name of the channel
+	signal 1 root file
+		histogram 1
+		histogram 2
+		.
+		.
+		.
+		histogram n
+	signal 2 root file
+		histogram 1
+		histogram 2
+		.
+		.
+		.
+		histogram n
+	.
+	.
+	.
+	signal n root file
+		histogram 1
+		histogram 2
+		.
+		.
+		.
+		histogram n
+	background 1 root file
+		histogram 1
+		histogram 2
+		.
+		.
+		.
+		histogram n
+	background 2 root file
+		histogram 1
+		histogram 2
+		.
+		.
+		.
+		histogram n
+	.
+	.
+	.
+	background n root file
+		histogram 1
+		histogram 2
+		.
+		.
+		.
+		histogram n
+	
+```
 
 ```
 {
      "channelPath" : <path to input data>,
      "sysUncertFile": <path to the systematic uncertanties file>,
-     "studyType" : <type of study, for now, only "pheno" is supported>,
+     "studyType" : {
+		 			"type": <exp or pheno>, 
+	 				"data": <only for exp, path to the root file with observational data>
+					 },
      "outputPath" : <output folder path>,
          "signals":[
-				<name of signal 1>,
-				<name of signal 2>,
+				<name of signal 1 without .root extension>,
+				<name of signal 2 without .root extension>,
 				.
 				.
 				.
      ],
          "backgrounds":[
-				<name of background 1>,
-				<name of background 2>,
-				<name of background 3>,
+				<name of background 1 without .root extension>,
+				<name of background 2 without .root extension>,
+				<name of background 3 without .root extension>,
 				.
 				.
 				.
