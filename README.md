@@ -36,7 +36,7 @@ To run the program, type the following command in your terminal replacing `<your
 ### Configuration file
 
 In order to run the program, you need to congfigure the configuration file in `JSON` format. 
-The input file to generate the card need to have the format:
+The input files needed to generate the cards need to have the format:
 ```
 folder with the name of the channel
 	signal 1 root file
@@ -89,6 +89,7 @@ folder with the name of the channel
 		histogram n
 	
 ```
+Configuration file explained:
 
 ```
 {
