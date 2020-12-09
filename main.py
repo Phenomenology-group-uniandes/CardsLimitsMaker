@@ -29,6 +29,19 @@ def getIndHistogramsInfo(config, outputPath):
 			print(commandToRun)
 			os.system(commandToRun)
 
+	if config["studyType"]["type"] == "exp" :
+		assert "data" in config["studyType"], "Add the path to observational data"
+		fileName = config["studyType"]["data"]
+		for histo in config['histograms']:
+			histoName = histo['name']
+			binEdges = histo['binEdges']
+			indHistoOutputPath = outputPath + histoName + '/rawHistogramInfo/' + histoName + '_observation.csv'
+			
+			commandToRun = './extractBins/main {} {} {} {}'.format(fileName,histoName,indHistoOutputPath,' '.join([str(x) for x in binEdges])) 
+			print(commandToRun)
+			os.system(commandToRun)
+
+
 def createGlobalMatrix(config, outputPath):
 	for histo in config['histograms']:
 		
@@ -40,11 +53,19 @@ def createGlobalMatrix(config, outputPath):
 		for sample in config['signals'] + config['backgrounds']:
 			
 			tempDf = pd.read_csv(folderToProcess + 'rawHistogramInfo/' + sample + '.csv')
-			globalMatrix[sample] = tempDf['BinCount'] 
-		
+			globalMatrix[sample] = tempDf['BinCount'] 		
+
 		globalMatrix['Data'] = 0
-		for bg in config['backgrounds']:
-			globalMatrix['Data'] = globalMatrix['Data'] + globalMatrix[bg] 
+
+		if config["studyType"]["type"] == "pheno":
+			for bg in config['backgrounds']:
+				globalMatrix['Data'] = globalMatrix['Data'] + globalMatrix[bg] 
+		elif config["studyType"]["type"] == "exp":
+			obsDataPath = folderToProcess + 'rawHistogramInfo/' + histoName + '_observation.csv'
+			obsData = pd.read_csv(obsDataPath)
+			globalMatrix['Data'] = obsData['BinCount']
+		else:
+			raise Exception("The field studyType.type can only be pheno or exp")
 		
 		globalMatrix['data'] = np.ceil(globalMatrix['Data'])
 		globalMatrix['bin'] = tempDf.index + 1
